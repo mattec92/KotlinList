@@ -13,9 +13,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupList()
+        setupFab()
     }
 
-    fun setupList() {
+    private fun setupList() {
         val listEntries: MutableList<ListEntry> = ArrayList()
         listEntries.add(ListEntry(title = "First", description = "First description"))
         listEntries.add(ListEntry(title = "Second"))
@@ -30,6 +31,12 @@ class MainActivity : AppCompatActivity() {
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = ListAdapter(this, listEntries)
+    }
+
+    private fun setupFab() {
+        addButton.setOnClickListener {
+
+        }
     }
 
 }
