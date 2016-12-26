@@ -11,6 +11,8 @@ import se.mattec.kotlinlist.adapters.ListAdapter
 
 class MainActivity : AppCompatActivity() {
 
+    var adapter: ListAdapter? = null;
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -20,8 +22,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupList() {
+        adapter = ListAdapter(this, Cache.entries)
+        adapter?.setHasStableIds(true)
+
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = ListAdapter(this, Cache.entries)
+        recyclerView.adapter = adapter
     }
 
     private fun setupFab() {
@@ -32,9 +37,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (data != null) {
+            val position = data.getIntExtra(EntryActivity.RESPONSE_EXTRA_POSITION, 0);
             when (resultCode) {
-                EntryActivity.RESPONSE_CODE_ITEM_CHANGED -> recyclerView?.adapter?.notifyItemChanged(data.getIntExtra(EntryActivity.RESPONSE_EXTRA_POSITION, 0))
-                EntryActivity.RESPONSE_CODE_ITEM_INSERTED -> recyclerView?.adapter?.notifyItemInserted(data.getIntExtra(EntryActivity.RESPONSE_EXTRA_POSITION, 0))
+                EntryActivity.RESPONSE_CODE_ITEM_CHANGED -> recyclerView?.adapter?.notifyItemChanged(position)
+                EntryActivity.RESPONSE_CODE_ITEM_INSERTED -> recyclerView?.adapter?.notifyItemInserted(position)
             }
         }
         super.onActivityResult(requestCode, resultCode, data)

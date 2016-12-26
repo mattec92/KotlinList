@@ -37,6 +37,10 @@ class ListAdapter(private val activity: Activity,
         return VIEW_TYPE_ITEM
     }
 
+    override fun getItemId(position: Int): Long {
+        return listEntries?.get(position)?.hashCode()?.toLong() as Long
+    }
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun init(listEntry: ListEntry, position: Int) {
