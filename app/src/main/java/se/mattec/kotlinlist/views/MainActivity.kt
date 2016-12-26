@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupFab() {
         addButton.setOnClickListener {
-
+            startActivity(EntryActivity().newIntent(this, null))
         }
     }
 

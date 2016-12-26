@@ -8,9 +8,12 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.row_list.view.*
 import se.mattec.kotlinlist.R
 import se.mattec.kotlinlist.models.ListEntry
+import se.mattec.kotlinlist.views.EntryActivity
 
 class ListAdapter(private val activity: Activity,
                   private val listEntries: List<ListEntry>?) : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
+
+    private val VIEW_TYPE_ITEM = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         when (viewType) {
@@ -37,21 +40,19 @@ class ListAdapter(private val activity: Activity,
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun init(listEntry: ListEntry, position: Int) {
-            itemView.title.text = listEntry.title
+            itemView.entryTitle.text = listEntry.title
 
             if (listEntry.description != null) {
-                itemView.description.text = listEntry.description
-                itemView.description.visibility = View.VISIBLE
+                itemView.entryDescription.text = listEntry.description
+                itemView.entryDescription.visibility = View.VISIBLE
             } else {
-                itemView.description.visibility = View.GONE
+                itemView.entryDescription.visibility = View.GONE
+            }
+
+            itemView.setOnClickListener {
+                activity.startActivity(EntryActivity().newIntent(activity, listEntry))
             }
         }
-
-    }
-
-    companion object {
-
-        private val VIEW_TYPE_ITEM = 0
 
     }
 
