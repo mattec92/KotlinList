@@ -1,4 +1,4 @@
-package se.mattec.kotlinlist;
+package se.mattec.kotlinlist.views;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;

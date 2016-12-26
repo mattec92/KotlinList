@@ -1,9 +1,11 @@
-package se.mattec.kotlinlist
+package se.mattec.kotlinlist.views
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
+import se.mattec.kotlinlist.R
+import se.mattec.kotlinlist.adapters.ListAdapter
 import se.mattec.kotlinlist.models.ListEntry
 import java.util.*
 
