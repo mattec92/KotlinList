@@ -42,7 +42,7 @@ class ListAdapter(private val activity: Activity,
         fun init(listEntry: ListEntry, position: Int) {
             itemView.entryTitle.text = listEntry.title
 
-            if (listEntry.description != null) {
+            if (!listEntry.description.isNullOrEmpty()) {
                 itemView.entryDescription.text = listEntry.description
                 itemView.entryDescription.visibility = View.VISIBLE
             } else {
@@ -50,7 +50,7 @@ class ListAdapter(private val activity: Activity,
             }
 
             itemView.setOnClickListener {
-                activity.startActivity(EntryActivity().newIntent(activity, listEntry))
+                activity.startActivityForResult(EntryActivity().newIntent(activity, listEntry), EntryActivity.REQUEST_CODE)
             }
         }
 
