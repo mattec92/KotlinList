@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_entry.*
 import se.mattec.kotlinlist.Cache
 import se.mattec.kotlinlist.R
@@ -16,7 +17,7 @@ class EntryActivity : AppCompatActivity() {
 
     companion object {
 
-        private val EXTRA_LIST_ENTRY = "EXTRA_LIST_ENTRY"
+        private val EXTRA_LIST_ENTRY_ID = "EXTRA_LIST_ENTRY_ID"
 
         val REQUEST_CODE = 0
         val RESPONSE_CODE_ITEM_CHANGED = 0
@@ -26,11 +27,12 @@ class EntryActivity : AppCompatActivity() {
 
     }
 
+    private var listEntryId: String? = null
     private var listEntry: ListEntry? = null
 
     fun newIntent(context: Context, listEntry: ListEntry?): Intent {
         val intent: Intent = Intent(context, EntryActivity::class.java)
-        intent.putExtra(EXTRA_LIST_ENTRY, listEntry)
+        intent.putExtra(EXTRA_LIST_ENTRY_ID, listEntry?.id)
         return intent
     }
 
@@ -42,10 +44,15 @@ class EntryActivity : AppCompatActivity() {
     }
 
     private fun getExtras() {
-        listEntry = intent?.getSerializableExtra(EXTRA_LIST_ENTRY) as ListEntry?
+        listEntryId = intent?.getStringExtra(EXTRA_LIST_ENTRY_ID)
     }
 
     private fun setupListEntry() {
+        if (listEntryId != null) {
+            Realm.getDefaultInstance().executeTransaction {
+                listEntry = Realm.getDefaultInstance().where(ListEntry::class.java).equalTo("id", listEntryId).findFirst();
+            }
+        }
         entryTitle.setText(listEntry?.title)
         entryDescription.setText(listEntry?.description)
     }
@@ -71,15 +78,22 @@ class EntryActivity : AppCompatActivity() {
                 val newEntry = ListEntry(entryTitle.text.toString(), entryDescription.text.toString())
                 Cache.entries.add(newEntry)
 
+                Realm.getDefaultInstance().executeTransaction {
+                    Realm.getDefaultInstance().insert(newEntry)
+                }
+
                 val intent = Intent();
                 intent.putExtra(RESPONSE_EXTRA_POSITION, Cache.entries.size - 1)
                 setResult(RESPONSE_CODE_ITEM_INSERTED, intent)
             } else { // Edit existing item
-                listEntry?.title = entryTitle.text.toString()
-                listEntry?.description = entryDescription.text.toString()
                 val oldIndex = Cache.entries.indexOf(listEntry as ListEntry);
                 Cache.entries.remove(listEntry as ListEntry);
                 Cache.entries.add(oldIndex, listEntry as ListEntry)
+
+                Realm.getDefaultInstance().executeTransaction {
+                    listEntry?.title = entryTitle.text.toString()
+                    listEntry?.description = entryDescription.text.toString()
+                }
 
                 val intent = Intent();
                 intent.putExtra(RESPONSE_EXTRA_POSITION, oldIndex)

@@ -1,13 +1,17 @@
 package se.mattec.kotlinlist.models
 
+import io.realm.RealmList
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 import java.io.Serializable
 import java.util.*
 
-class ListEntry(var title: String,
-                var description: String? = null,
-                val items: List<Item> = ArrayList()) : Serializable {
+open class ListEntry(open var title: String? = null,
+                     open var description: String? = null,
+                     open var items: RealmList<ListEntryItem> = RealmList()) : Serializable, RealmObject() {
 
-    val id: String = UUID.randomUUID().toString()
+    @PrimaryKey
+    open var id: String = UUID.randomUUID().toString()
 
     override fun equals(other: Any?): Boolean {
         return other is ListEntry && other.id == id
@@ -15,13 +19,6 @@ class ListEntry(var title: String,
 
     override fun hashCode(): Int {
         return id.hashCode();
-    }
-
-    inner class Item {
-
-        val description: String? = null
-        val isChecked: Boolean = false
-
     }
 
 }

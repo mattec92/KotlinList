@@ -11,7 +11,7 @@ import se.mattec.kotlinlist.adapters.ListAdapter
 
 class MainActivity : AppCompatActivity() {
 
-    var adapter: ListAdapter? = null;
+    private var adapter: ListAdapter? = null;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
