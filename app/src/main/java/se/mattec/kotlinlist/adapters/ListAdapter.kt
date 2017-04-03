@@ -11,7 +11,7 @@ import se.mattec.kotlinlist.models.ListEntry
 import se.mattec.kotlinlist.views.EntryActivity
 
 class ListAdapter(private val activity: Activity,
-                  private val listEntries: List<ListEntry>?) : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
+                  private val listEntries: List<ListEntry>) : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 
     private val VIEW_TYPE_ITEM = 0
 
@@ -23,14 +23,11 @@ class ListAdapter(private val activity: Activity,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.init(listEntries!![position], position)
+        holder.init(listEntries[position], position)
     }
 
     override fun getItemCount(): Int {
-        if (listEntries != null) {
-            return listEntries.size
-        }
-        return 0
+        return listEntries.size
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -38,7 +35,7 @@ class ListAdapter(private val activity: Activity,
     }
 
     override fun getItemId(position: Int): Long {
-        return listEntries?.get(position)?.hashCode()?.toLong() as Long
+        return listEntries.get(position).hashCode().toLong()
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

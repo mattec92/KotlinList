@@ -36,12 +36,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (data != null) {
-            val position = data.getIntExtra(EntryActivity.RESPONSE_EXTRA_POSITION, 0);
-            when (resultCode) {
-                EntryActivity.RESPONSE_CODE_ITEM_CHANGED -> recyclerView?.adapter?.notifyItemChanged(position)
-                EntryActivity.RESPONSE_CODE_ITEM_INSERTED -> recyclerView?.adapter?.notifyItemInserted(position)
-            }
+        val position = data?.getIntExtra(EntryActivity.RESPONSE_EXTRA_POSITION, 0) ?: 0
+        when (resultCode) {
+            EntryActivity.RESPONSE_CODE_ITEM_CHANGED -> recyclerView?.adapter?.notifyItemChanged(position)
+            EntryActivity.RESPONSE_CODE_ITEM_INSERTED -> recyclerView?.adapter?.notifyItemInserted(position)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
